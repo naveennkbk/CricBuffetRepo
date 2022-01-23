@@ -1,0 +1,81 @@
+﻿@model CricBuffet.Areas.Admin.Models.BuddyViewModel
+
+
+<div class="col-lg-12 grid-margin stretch-card" style="margin-top:-36px">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">
+                <span style="color: #76bf70">Add</span> <span style="color: #1F3BB3">Buddy</span>
+            </h4>
+
+            @using (Html.BeginForm("BuddyEdit", "Buddy", FormMethod.Post, new { area = "Admin", encType = "multipart/form-data", onSubmit = " return subform(this)" }))
+
+            {
+
+                @Html.HiddenFor(model => model.ID)
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.BuddyName, new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.BuddyName, new { htmlAttributes = new { @class = "form-control", @id = "buddyName" } })
+                                    @Html.ValidationMessageFor(model => model.BuddyName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ProfileImage, new { @class = "control-label" })
+                                    <div class="custom-file">
+                                        <input asp-for="ProfileImage" class="custom-file-input" id="ProfileImage" onchange="document.getElementById('targetImg').src = window.URL.createObjectURL(this.files[0])">
+                                       
+                                    </div>
+                                    <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" id="imagehideshow">
+
+                            <div id="imgPreview">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ProfileImage, new { @class = "control-label" })<br />
+                                    <img class="img-responsive" src="@Url.Content("/images/"+@Model.BuddyPicture)" id="targetImg" style="height:120px;width:120px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" style="padding:3px;font-size:16px" />
+                    <a class="btn btn-danger" asp-area="Admin" asp-controller="Buddy" asp-action="BuddyList" style="padding:5px">Back</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+       
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<script>
+    $(document).on('change', '#ProfileImage', function (e) {
+        $("#imagehideshow").show();
+
+        if (e.files && e.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (a) {
+                $('#targetImg')
+                    .attr('src', a.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    });
+</script>
